@@ -1,13 +1,10 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.seralization)
     alias(libs.plugins.realm)
     alias(libs.plugins.buildkonfig)
@@ -17,9 +14,10 @@ kotlin {
     tasks.create("testClasses")
 
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
         }
     }
     
@@ -35,7 +33,6 @@ kotlin {
     }
     
     sourceSets {
-        
         androidMain.dependencies {
             //compose
             implementation(compose.preview)
@@ -71,13 +68,12 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
             //multiplatform settings
-            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.multiplatform.settings.coroutines)
             //mongodb realm
             implementation(libs.mongodb.relam)
             //stately
-            implementation(libs.stately.concurrency)
-            implementation(libs.stately.concurrent.collections)
+            implementation(libs.stately.common)
         }
         iosMain.dependencies {
             //ktor
@@ -114,9 +110,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        compose = true
     }
     dependencies {
         debugImplementation(compose.uiTooling)

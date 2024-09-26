@@ -5,7 +5,7 @@ import com.example.currencyapp.presentation.ui.theme.GREEN
 import com.example.currencyapp.presentation.ui.theme.ORANGE
 import com.example.currencyapp.presentation.ui.theme.WHITE
 
-enum class RatesStatus(
+enum class CurrenciesStatus(
     val title: String,
     val color: Color
 ) {

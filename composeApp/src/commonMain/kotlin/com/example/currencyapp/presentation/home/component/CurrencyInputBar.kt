@@ -13,6 +13,7 @@ import com.example.currencyapp.domain.model.Currency
 import com.example.currencyapp.presentation.ui.theme.ICON_SIZE_MEDIUM
 import com.example.currencyapp.presentation.ui.theme.PADDING_EXTRA_SMALL
 import com.example.currencyapp.presentation.ui.theme.WHITE
+import com.example.currencyapp.util.RequestState
 import currencyapp.composeapp.generated.resources.Res
 import currencyapp.composeapp.generated.resources.switch_ic
 import org.jetbrains.compose.resources.painterResource
@@ -20,8 +21,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CurrencyInputBar(
     modifier: Modifier = Modifier,
-    sourceCurrency: Currency,
-    targetCurrency: Currency,
+    sourceCurrencyState: RequestState<Currency>,
+    targetCurrencyState: RequestState<Currency>,
     onSourceCurrencyClicked: () -> Unit,
     onTargetCurrencyClicked: () -> Unit,
     onSwitch: () -> Unit,
@@ -30,13 +31,20 @@ fun CurrencyInputBar(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CurrencyInput(
-            modifier = Modifier
-                .weight(1f),
-            label = "From",
-            currency = sourceCurrency,
-            onClick = onSourceCurrencyClicked
-        )
+        if (sourceCurrencyState is RequestState.Success) {
+            CurrencyInput(
+                modifier = Modifier
+                    .weight(1f),
+                label = "From",
+                currency = sourceCurrencyState.data,
+                onClick = onSourceCurrencyClicked
+            )
+        } else {
+            CurrencyInputLoading(
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
         Spacer(
             modifier = Modifier.width(PADDING_EXTRA_SMALL)
         )
@@ -54,12 +62,19 @@ fun CurrencyInputBar(
         Spacer(
             modifier = Modifier.width(PADDING_EXTRA_SMALL)
         )
-        CurrencyInput(
-            modifier = Modifier
-                .weight(1f),
-            label = "To",
-            currency = targetCurrency,
-            onClick = onTargetCurrencyClicked
-        )
+        if (targetCurrencyState is RequestState.Success) {
+            CurrencyInput(
+                modifier = Modifier
+                    .weight(1f),
+                label = "To",
+                currency = targetCurrencyState.data,
+                onClick = onTargetCurrencyClicked
+            )
+        } else {
+            CurrencyInputLoading(
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
     }
 }

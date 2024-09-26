@@ -1,9 +1,9 @@
 package com.example.currencyapp.data.remote.api
 
 import com.example.currencyapp.data.remote.dto.LatestExchangeRatesResponse
-import com.example.currencyapp.domain.api.CurrencyApi
-import com.example.currencyapp.domain.manager.LocalUserManager
 import com.example.currencyapp.domain.model.Currency
+import com.example.currencyapp.domain.repository.LocalUserPreferencesRepository
+import com.example.currencyapp.domain.repository.RemoteDataRepository
 import com.example.currencyapp.util.Constants
 import com.example.currencyapp.util.CurrencyCode
 import com.example.currencyapp.util.RequestState
@@ -12,10 +12,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.serialization.json.Json
 
-class CurrencyApiImpl(
+class RemoteDataRepositoryImpl(
     private val httpClient: HttpClient,
-    private val localUserManager: LocalUserManager,
-): CurrencyApi {
+    private val localUserPreferencesRepository: LocalUserPreferencesRepository,
+): RemoteDataRepository {
     override suspend fun getLatestExchangeRates(): RequestState<List<Currency>> {
         return try {
             val response = httpClient.get(
@@ -35,7 +35,7 @@ class CurrencyApiImpl(
                 val currencyList = latestExchangeRatesResponse.data.values.filter { currency ->
                     availableCurrencyCodes.contains(currency.code)
                 }
-                localUserManager.saveLastUpdatedTimeStamp(lastUpdated)
+                localUserPreferencesRepository.saveLastUpdatedTimeStamp(lastUpdated)
                 RequestState.Success(
                     data = currencyList
                 )

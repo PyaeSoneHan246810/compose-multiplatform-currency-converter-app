@@ -1,6 +1,7 @@
-package com.example.currencyapp.data.remote.manager
+package com.example.currencyapp.data.local
 
-import com.example.currencyapp.domain.manager.LocalUserManager
+import com.example.currencyapp.domain.repository.LocalUserPreferencesRepository
+import com.example.currencyapp.util.CurrencyCode
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
@@ -9,9 +10,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class LocalUserManagerImpl(
+class LocalUserPreferencesRepositoryImpl(
     private val settings: Settings
-): LocalUserManager {
+): LocalUserPreferencesRepository {
     @OptIn(ExperimentalSettingsApi::class)
     private val flowSettings = (settings as ObservableSettings).toFlowSettings()
 
@@ -42,7 +43,43 @@ class LocalUserManagerImpl(
         }
     }
 
+    @OptIn(ExperimentalSettingsApi::class)
+    override suspend fun saveSourceCurrencyCode(code: String) {
+        flowSettings.putString(
+            key = SOURCE_CURRENCY_CODE_KEY,
+            value = code
+        )
+    }
+
+    @OptIn(ExperimentalSettingsApi::class)
+    override suspend fun saveTargetCurrencyCode(code: String) {
+        flowSettings.putString(
+            key = TARGET_CURRENCY_CODE_KEY,
+            value = code
+        )
+    }
+
+    @OptIn(ExperimentalSettingsApi::class)
+    override suspend fun getSourceCurrencyCode(): String {
+        return flowSettings.getString(
+            key = SOURCE_CURRENCY_CODE_KEY,
+            defaultValue = DEFAULT_SOURCE_CURRENCY_CODE
+        )
+    }
+
+    @OptIn(ExperimentalSettingsApi::class)
+    override suspend fun getTargetCurrencyCode(): String {
+        return flowSettings.getString(
+            key = TARGET_CURRENCY_CODE_KEY,
+            defaultValue = DEFAULT_TARGET_CURRENCY_CODE
+        )
+    }
+
     companion object {
         private const val TIMESTAMP_KEY = "lastUpdated"
+        private const val SOURCE_CURRENCY_CODE_KEY = "sourceCurrencyCode"
+        private const val TARGET_CURRENCY_CODE_KEY = "targetCurrencyCode"
+        private val DEFAULT_SOURCE_CURRENCY_CODE = CurrencyCode.USD.name
+        private val DEFAULT_TARGET_CURRENCY_CODE = CurrencyCode.EUR.name
     }
 }

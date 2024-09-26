@@ -18,11 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.currencyapp.presentation.ui.theme.HOME_IMAGE_SIZE
 import com.example.currencyapp.presentation.ui.theme.ICON_SIZE_LARGE
 import com.example.currencyapp.presentation.ui.theme.ORANGE
 import com.example.currencyapp.presentation.ui.theme.PADDING_EXTRA_SMALL
 import com.example.currencyapp.presentation.ui.theme.PADDING_MEDIUM
-import com.example.currencyapp.presentation.ui.theme.RATE_STATUS_BAR_IMAGE_SIZE
 import com.example.currencyapp.presentation.ui.theme.WHITE
 import com.example.currencyapp.util.getFormattedCurrentDateTime
 import currencyapp.composeapp.generated.resources.Res
@@ -30,12 +30,12 @@ import currencyapp.composeapp.generated.resources.exchange_rate
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun RatesStatusBar(
+fun CurrenciesStatusBar(
     modifier: Modifier = Modifier,
-    ratesStatus: RatesStatus,
+    currenciesStatus: CurrenciesStatus,
     onRefresh: () -> Unit,
 ) {
-    val areRatesStale = ratesStatus == RatesStatus.Stale
+    val areCurrenciesStale = currenciesStatus == CurrenciesStatus.Stale
     val formattedCurrentDateTime = getFormattedCurrentDateTime()
     Row(
         modifier = modifier,
@@ -47,7 +47,7 @@ fun RatesStatusBar(
         ) {
             Image(
                 modifier = Modifier
-                    .size(RATE_STATUS_BAR_IMAGE_SIZE),
+                    .size(HOME_IMAGE_SIZE),
                 painter = painterResource(Res.drawable.exchange_rate),
                 contentDescription = null
             )
@@ -66,14 +66,14 @@ fun RatesStatusBar(
                         .height(PADDING_EXTRA_SMALL),
                 )
                 Text(
-                    text = ratesStatus.title,
-                    color = ratesStatus.color,
+                    text = currenciesStatus.title,
+                    color = currenciesStatus.color,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
         }
         AnimatedVisibility(
-            visible = areRatesStale
+            visible = areCurrenciesStale
         ) {
             IconButton(
                 onClick = onRefresh

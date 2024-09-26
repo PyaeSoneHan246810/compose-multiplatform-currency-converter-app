@@ -17,14 +17,15 @@ import com.example.currencyapp.presentation.ui.theme.HEADER_COLOR
 import com.example.currencyapp.presentation.ui.theme.PADDING_LARGE
 import com.example.currencyapp.presentation.ui.theme.PADDING_MEDIUM
 import com.example.currencyapp.presentation.ui.theme.RADIUS_MEDIUM
+import com.example.currencyapp.util.RequestState
 
 @Composable
 fun HomeHeader(
     modifier: Modifier = Modifier,
-    ratesStatus: RatesStatus,
+    currenciesStatus: CurrenciesStatus,
     onRefresh: (event: HomeEvent) -> Unit,
-    sourceCurrency: Currency,
-    targetCurrency: Currency,
+    sourceCurrencyState: RequestState<Currency>,
+    targetCurrencyState: RequestState<Currency>,
     onSourceCurrencyClicked: () -> Unit,
     onTargetCurrencyClicked: () -> Unit,
     onSwitch: () -> Unit,
@@ -42,10 +43,10 @@ fun HomeHeader(
                 .padding(PADDING_LARGE)
                 .statusBarsPadding()
         ) {
-            RatesStatusBar(
+            CurrenciesStatusBar(
                 modifier = Modifier
                     .fillMaxWidth(),
-                ratesStatus = ratesStatus,
+                currenciesStatus = currenciesStatus,
                 onRefresh = {
                     onRefresh(HomeEvent.RefreshRates)
                 }
@@ -57,8 +58,8 @@ fun HomeHeader(
             CurrencyInputBar(
                 modifier = Modifier
                     .fillMaxWidth(),
-                sourceCurrency = sourceCurrency,
-                targetCurrency = targetCurrency,
+                sourceCurrencyState = sourceCurrencyState,
+                targetCurrencyState = targetCurrencyState,
                 onSourceCurrencyClicked = onSourceCurrencyClicked,
                 onTargetCurrencyClicked = onTargetCurrencyClicked,
                 onSwitch = onSwitch

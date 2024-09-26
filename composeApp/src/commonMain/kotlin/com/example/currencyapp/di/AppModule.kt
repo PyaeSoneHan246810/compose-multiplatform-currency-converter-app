@@ -1,10 +1,12 @@
 package com.example.currencyapp.di
 
 import com.example.currencyapp.BuildKonfig
-import com.example.currencyapp.data.remote.api.CurrencyApiImpl
-import com.example.currencyapp.data.remote.manager.LocalUserManagerImpl
-import com.example.currencyapp.domain.api.CurrencyApi
-import com.example.currencyapp.domain.manager.LocalUserManager
+import com.example.currencyapp.data.local.LocalDataRepositoryImpl
+import com.example.currencyapp.data.local.LocalUserPreferencesRepositoryImpl
+import com.example.currencyapp.data.remote.api.RemoteDataRepositoryImpl
+import com.example.currencyapp.domain.repository.LocalDataRepository
+import com.example.currencyapp.domain.repository.LocalUserPreferencesRepository
+import com.example.currencyapp.domain.repository.RemoteDataRepository
 import com.example.currencyapp.presentation.home.viewModel.HomeViewModel
 import com.example.currencyapp.util.Constants
 import com.russhwolf.settings.Settings
@@ -23,10 +25,13 @@ val appModule = module {
     single<Settings> {
         Settings()
     }
-    single<LocalUserManager> {
-        LocalUserManagerImpl(
+    single<LocalUserPreferencesRepository> {
+        LocalUserPreferencesRepositoryImpl(
             settings = get()
         )
+    }
+    single<LocalDataRepository> {
+        LocalDataRepositoryImpl()
     }
     single<HttpClient> {
         HttpClient {
@@ -49,16 +54,17 @@ val appModule = module {
             }
         }
     }
-    single<CurrencyApi> {
-        CurrencyApiImpl(
+    single<RemoteDataRepository> {
+        RemoteDataRepositoryImpl(
             httpClient = get(),
-            localUserManager = get()
+            localUserPreferencesRepository = get()
         )
     }
     factory {
         HomeViewModel(
-            localUserManager = get(),
-            currencyApi = get()
+            localUserPreferencesRepository = get(),
+            localDataRepository = get(),
+            remoteDataRepository = get()
         )
     }
 }
