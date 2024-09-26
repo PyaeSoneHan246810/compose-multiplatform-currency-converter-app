@@ -4,8 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.example.currencyapp.domain.api.CurrencyApi
 import com.example.currencyapp.domain.manager.LocalUserManager
-import com.example.currencyapp.presentation.home.HomeEvent
 import com.example.currencyapp.presentation.home.component.RatesStatus
+import com.example.currencyapp.presentation.home.event.HomeEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

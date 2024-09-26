@@ -26,6 +26,7 @@ realm = "2.0.0"
 stately = "2.1.0"
 buildkonfig = "0.15.2"
 
+
 [libraries]
 #kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 #kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
