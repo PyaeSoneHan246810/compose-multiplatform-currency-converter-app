@@ -17,6 +17,7 @@ import com.example.currencyapp.presentation.ui.theme.HEADER_COLOR
 import com.example.currencyapp.presentation.ui.theme.PADDING_LARGE
 import com.example.currencyapp.presentation.ui.theme.PADDING_MEDIUM
 import com.example.currencyapp.presentation.ui.theme.RADIUS_MEDIUM
+import com.example.currencyapp.util.CurrenciesStatus
 import com.example.currencyapp.util.RequestState
 
 @Composable
@@ -28,7 +29,7 @@ fun HomeHeader(
     targetCurrencyState: RequestState<Currency>,
     onSourceCurrencyClicked: () -> Unit,
     onTargetCurrencyClicked: () -> Unit,
-    onSwitch: () -> Unit,
+    onSwitch: (event: HomeEvent) -> Unit,
     currencyAmountInput: String,
     onCurrencyInputAmountChanged: (newInputAmount: String) -> Unit
 ) {
@@ -62,7 +63,9 @@ fun HomeHeader(
                 targetCurrencyState = targetCurrencyState,
                 onSourceCurrencyClicked = onSourceCurrencyClicked,
                 onTargetCurrencyClicked = onTargetCurrencyClicked,
-                onSwitch = onSwitch
+                onSwitch = {
+                    onSwitch(HomeEvent.SwitchCurrencies)
+                }
             )
             Spacer(
                 modifier = Modifier

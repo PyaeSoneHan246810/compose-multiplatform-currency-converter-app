@@ -1,4 +1,4 @@
-package com.example.currencyapp.presentation.home.component
+package com.example.currencyapp.util
 
 import androidx.compose.ui.graphics.Color
 import com.example.currencyapp.presentation.ui.theme.GREEN

@@ -6,6 +6,7 @@ import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.coroutines.toFlowSettings
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -60,16 +61,16 @@ class LocalUserPreferencesRepositoryImpl(
     }
 
     @OptIn(ExperimentalSettingsApi::class)
-    override suspend fun getSourceCurrencyCode(): String {
-        return flowSettings.getString(
+    override fun getSourceCurrencyCode(): Flow<String> {
+        return flowSettings.getStringFlow(
             key = SOURCE_CURRENCY_CODE_KEY,
             defaultValue = DEFAULT_SOURCE_CURRENCY_CODE
         )
     }
 
     @OptIn(ExperimentalSettingsApi::class)
-    override suspend fun getTargetCurrencyCode(): String {
-        return flowSettings.getString(
+    override fun getTargetCurrencyCode(): Flow<String> {
+        return flowSettings.getStringFlow(
             key = TARGET_CURRENCY_CODE_KEY,
             defaultValue = DEFAULT_TARGET_CURRENCY_CODE
         )

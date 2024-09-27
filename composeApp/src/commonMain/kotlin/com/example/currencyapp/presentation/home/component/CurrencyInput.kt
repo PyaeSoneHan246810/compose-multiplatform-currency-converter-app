@@ -1,5 +1,12 @@
 package com.example.currencyapp.presentation.home.component
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,39 +56,55 @@ fun CurrencyInput(
         Spacer(
             modifier = Modifier.height(PADDING_SMALL)
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(INPUT_BOX_HEIGHT)
-                .clip(RoundedCornerShape(RADIUS_SMALL))
-                .background(WHITE.copy(alpha = 0.05f))
-                .clickable {
-                    onClick()
-                }
-                .padding(PADDING_MEDIUM),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Image(
+        AnimatedContent(
+            targetState = currency,
+            transitionSpec = {
+                scaleIn(
+                    tween(durationMillis = 400)
+                ) + fadeIn(
+                    tween(durationMillis = 800)
+                ) togetherWith scaleOut(
+                    tween(durationMillis = 400)
+                ) + fadeOut(
+                    tween(durationMillis = 800)
+                )
+            },
+            label = "Content Animation"
+        ) { currency ->
+            Row(
                 modifier = Modifier
-                    .size(ICON_SIZE_SMALL),
-                painter = painterResource(
-                    CurrencyCode.valueOf(currency.code).flag
-                ),
-                contentDescription = null
-            )
-            Spacer(
-                modifier = Modifier.width(PADDING_MEDIUM)
-            )
-            Text(
-                text = CurrencyCode.valueOf(currency.code).name,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = WHITE,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+                    .fillMaxWidth()
+                    .height(INPUT_BOX_HEIGHT)
+                    .clip(RoundedCornerShape(RADIUS_SMALL))
+                    .background(WHITE.copy(alpha = 0.05f))
+                    .clickable {
+                        onClick()
+                    }
+                    .padding(PADDING_MEDIUM),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(ICON_SIZE_SMALL),
+                    painter = painterResource(
+                        CurrencyCode.valueOf(currency.code).flag
+                    ),
+                    contentDescription = null
+                )
+                Spacer(
+                    modifier = Modifier.width(PADDING_MEDIUM)
+                )
+                Text(
+                    text = CurrencyCode.valueOf(currency.code).name,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = WHITE,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }

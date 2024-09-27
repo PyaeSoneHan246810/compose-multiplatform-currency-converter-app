@@ -24,6 +24,7 @@ import com.example.currencyapp.presentation.ui.theme.ORANGE
 import com.example.currencyapp.presentation.ui.theme.PADDING_EXTRA_SMALL
 import com.example.currencyapp.presentation.ui.theme.PADDING_MEDIUM
 import com.example.currencyapp.presentation.ui.theme.WHITE
+import com.example.currencyapp.util.CurrenciesStatus
 import com.example.currencyapp.util.getFormattedCurrentDateTime
 import currencyapp.composeapp.generated.resources.Res
 import currencyapp.composeapp.generated.resources.exchange_rate
