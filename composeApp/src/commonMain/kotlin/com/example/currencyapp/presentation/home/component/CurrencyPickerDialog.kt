@@ -86,11 +86,18 @@ fun CurrencyPickerDialog(
                             currenciesList.addAll(currencies)
                         }
                     },
+                    placeholder = {
+                        Text("Search currency...")
+                    },
                     colors = TextFieldDefaults.colors(
                         unfocusedIndicatorColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedContainerColor = TEXT_COLOR.copy(alpha = 0.1f),
                         focusedContainerColor = TEXT_COLOR.copy(alpha = 0.1f),
+                        unfocusedPlaceholderColor = TEXT_COLOR.copy(alpha = 0.6f),
+                        focusedPlaceholderColor = TEXT_COLOR.copy(alpha = 0.6f),
+                        unfocusedTextColor = TEXT_COLOR,
+                        focusedTextColor = TEXT_COLOR,
                         cursorColor = TEXT_COLOR
                     )
                 )

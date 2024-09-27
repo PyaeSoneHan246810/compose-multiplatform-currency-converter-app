@@ -3,6 +3,8 @@ package com.example.currencyapp.presentation.home.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.example.currencyapp.presentation.home.component.CurrencyPickerDialog
 import com.example.currencyapp.presentation.home.component.DisplayResult
+import com.example.currencyapp.presentation.home.component.HomeBody
 import com.example.currencyapp.presentation.home.component.HomeHeader
 import com.example.currencyapp.presentation.home.component.LoadingIndicator
 import com.example.currencyapp.presentation.home.event.HomeEvent
@@ -32,9 +35,8 @@ class HomeScreen: Screen {
         val currenciesState by homeViewModel.currenciesState.collectAsState()
         val sourceCurrencyState by homeViewModel.sourceCurrencyState.collectAsState()
         val targetCurrencyState by homeViewModel.targetCurrencyState.collectAsState()
-        var inputAmount by rememberSaveable {
-            mutableStateOf("")
-        }
+        val inputAmount = homeViewModel.inputAmount
+        val exchangeAmount = homeViewModel.exchangeAmount
         var openCurrencyPicker by rememberSaveable {
             mutableStateOf(false)
         }
@@ -85,9 +87,17 @@ class HomeScreen: Screen {
                             },
                             onSwitch = homeViewModel::onEvent,
                             currencyAmountInput = inputAmount,
-                            onCurrencyInputAmountChanged = { newInputAmount ->
-                                inputAmount = newInputAmount
-                            }
+                            onCurrencyInputAmountChanged = homeViewModel::onEvent
+                        )
+                        HomeBody(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .navigationBarsPadding()
+                                .imePadding(),
+                            sourceCurrencyState = sourceCurrencyState,
+                            targetCurrencyState = targetCurrencyState,
+                            amount = exchangeAmount,
+                            onConvertClick = homeViewModel::onEvent
                         )
                     }
                     if (openCurrencyPicker && currencyPickerCurrencyType != CurrencyType.None) {

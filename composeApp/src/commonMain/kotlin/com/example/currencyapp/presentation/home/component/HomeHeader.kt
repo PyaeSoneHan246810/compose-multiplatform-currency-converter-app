@@ -31,7 +31,7 @@ fun HomeHeader(
     onTargetCurrencyClicked: () -> Unit,
     onSwitch: (event: HomeEvent) -> Unit,
     currencyAmountInput: String,
-    onCurrencyInputAmountChanged: (newInputAmount: String) -> Unit
+    onCurrencyInputAmountChanged: (event: HomeEvent) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -73,7 +73,9 @@ fun HomeHeader(
             )
             AmountInputField(
                 value = currencyAmountInput,
-                onValueChanged = onCurrencyInputAmountChanged
+                onValueChanged = { newValue ->
+                    onCurrencyInputAmountChanged(HomeEvent.ChangeInputAmount(newValue))
+                }
             )
         }
     }

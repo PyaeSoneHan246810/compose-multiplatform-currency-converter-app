@@ -1,5 +1,8 @@
 package com.example.currencyapp.presentation.home.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.example.currencyapp.domain.model.Currency
@@ -37,6 +40,12 @@ class HomeViewModel(
     private val _targetCurrencyState: MutableStateFlow<RequestState<Currency>> = MutableStateFlow(RequestState.Idle)
     val targetCurrencyState: StateFlow<RequestState<Currency>> = _targetCurrencyState.asStateFlow()
 
+    var inputAmount by  mutableStateOf("")
+        private set
+
+    var exchangeAmount by mutableStateOf(0.00)
+        private set
+
     init {
         screenModelScope.launch(Dispatchers.Default) {
             getCurrenciesState()
@@ -68,12 +77,19 @@ class HomeViewModel(
                         targetCurrencyCode = targetCurrencyCode
                     )
                 }
+                convertCurrency()
+            }
+            is HomeEvent.ChangeInputAmount -> {
+                inputAmount = event.amount
             }
             is HomeEvent.SaveSourceCurrencyCode -> {
                 saveSourceCurrencyCode(sourceCurrencyCode = event.code)
             }
             is HomeEvent.SaveTargetCurrencyCode -> {
                 saveTargetCurrencyCode(targetCurrencyCode = event.code)
+            }
+            is HomeEvent.ConvertCurrency -> {
+                convertCurrency()
             }
         }
     }
@@ -218,6 +234,18 @@ class HomeViewModel(
             localUserPreferencesRepository.saveTargetCurrencyCode(
                 code = targetCurrencyCode
             )
+        }
+    }
+
+    private fun convertCurrency() {
+        if (currenciesState.value.isSuccess() && sourceCurrencyState.value.isSuccess() && targetCurrencyState.value.isSuccess()) {
+            val sourceCurrency = sourceCurrencyState.value.getSuccessData()
+            val targetCurrency = targetCurrencyState.value.getSuccessData()
+            val sourceCurrencyAmountInOneUSD = sourceCurrency.value
+            val targetCurrencyAmountInOneUSD = targetCurrency.value
+            val sourceCurrencyInputAmount = inputAmount.ifEmpty(defaultValue = {"0"}).toDouble()
+            exchangeAmount = (sourceCurrencyInputAmount / sourceCurrencyAmountInOneUSD) * targetCurrencyAmountInOneUSD
+            println(exchangeAmount)
         }
     }
 
